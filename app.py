@@ -64,12 +64,10 @@ st.sidebar.markdown("[👉 Siga no LinkedIn](https://www.linkedin.com/in/vagner-
 st.sidebar.markdown("[📸 Siga no Instagram](https://instagram.com/vagnertudisco.oficial)")
 st.sidebar.markdown("---")
 
-st.sidebar.title("⚙️ Modo de Operação")
-st.sidebar.markdown("Use essa chave na Véspera e no Dia da Eleição.")
-modo_app = st.sidebar.radio(
-    "Escolha o Motor do Painel:",
-    ["🔮 Predição (Pesquisas/Internet)", "🔴 Apuração Oficial (TSE)"]
-)
+if 'modo' not in st.session_state:
+    st.session_state['modo'] = "Predição"
+
+modo_app = st.session_state['modo']
 
 if modo_app == "🔴 Apuração Oficial (TSE)":
     # MÓDULO 1: APURAÇÃO AO VIVO TSE
@@ -77,23 +75,25 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
     st.markdown("Conectado à base oficial de totalização de votos.")
     
     # "Tomada" para o link do TSE na véspera
-    st.sidebar.markdown("---")
-    url_tse = st.sidebar.text_input("🔗 Link Oficial do TSE (JSON)", value="", help="Cole aqui o link oficial do TSE amanhã às 17h. Se deixar em branco, usará a simulação.")
+    with st.expander("🔗 Conectar ao Servidor do TSE"):
+        url_tse = st.text_input("Link oficial do Governo:", value="https://resultados.tse.jus.br/oficial/ele2026/3220/dados-simplificados/br/br-c0001-e003220-r.json")
     
-    col_btn, col_auto = st.columns([1, 1])
-    with col_btn:
-        if st.button("🔄 Atualizar Manualmente"):
-            st.toast("Buscando pacote de dados no servidor do TSE...")
+    col_btn1, col_btn2 = st.columns(2)
+    with col_btn1:
+        if st.button("⬅️ Voltar para Predição", use_container_width=True):
+            st.session_state['modo'] = "Predição"
+            st.rerun()
+    with col_btn2:
+        if st.button("🔄 Forçar Atualização", use_container_width=True):
+            st.toast("Buscando dados...")
             time.sleep(0.5)
-    with col_auto:
-        auto_update = st.toggle("⏱️ Atualização Automática (A cada 30s)", value=False, help="Liga o robô que aperta F5 para você.")
-        
-    if auto_update:
-        import streamlit.components.v1 as components
-        components.html(
-            "<script>setTimeout(function(){ window.parent.location.reload(); }, 30000);</script>",
-            height=0
-        )
+            
+    # Robô invisível de atualização automática (sempre ligado a cada 30s)
+    import streamlit.components.v1 as components
+    components.html(
+        "<script>setTimeout(function(){ window.parent.location.reload(); }, 30000);</script>",
+        height=0
+    )
         
     try:
         if url_tse.strip():
@@ -146,6 +146,10 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
 
 else:
     # MÓDULO 2: PREDIÇÃO GAMIFICADA
+    if st.button("🔴 ACOMPANHAR APURAÇÃO OFICIAL AO VIVO", type="primary", use_container_width=True):
+        st.session_state['modo'] = "🔴 Apuração Oficial (TSE)"
+        st.rerun()
+
     st.title("🔥 Oráculo 2026: A Mãe de Todas as Pesquisas")
     st.markdown("O primeiro supercomputador que mistura as ruas com a internet para prever a urna antes da TV.")
 
