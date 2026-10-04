@@ -7,6 +7,7 @@ import json
 import time
 import os
 import datetime
+import requests
 
 # Configuração Mobile-First
 st.set_page_config(page_title="Oráculo 2026 | A Mãe de Todas as Pesquisas", layout="centered", page_icon="🔥")
@@ -75,6 +76,10 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
     st.title("🔴 TSE: Apuração ao Vivo")
     st.markdown("Conectado à base oficial de totalização de votos.")
     
+    # "Tomada" para o link do TSE na véspera
+    st.sidebar.markdown("---")
+    url_tse = st.sidebar.text_input("🔗 Link Oficial do TSE (JSON)", value="", help="Cole aqui o link oficial do TSE amanhã às 17h. Se deixar em branco, usará a simulação.")
+    
     col_btn, col_auto = st.columns([1, 1])
     with col_btn:
         if st.button("🔄 Atualizar Manualmente"):
@@ -91,8 +96,15 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
         )
         
     try:
-        with open("tse_apuracao_mock.json", "r", encoding='utf-8') as f:
-            dados_tse = json.load(f)
+        if url_tse.strip():
+            # Conecta direto no governo
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            req = requests.get(url_tse.strip(), headers=headers, timeout=10)
+            dados_tse = req.json()
+        else:
+            # Usa o simulador local
+            with open("tse_apuracao_mock.json", "r", encoding='utf-8') as f:
+                dados_tse = json.load(f)
             
         urnas_apuradas = float(dados_tse.get("pst", 0))
         data_hora = f"{dados_tse.get('dt', '')} às {dados_tse.get('ht', '')}"
