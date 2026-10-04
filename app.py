@@ -76,7 +76,7 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
     
     # "Tomada" para o link do TSE na véspera
     with st.expander("🔗 Conectar ao Servidor do TSE"):
-        url_tse = st.text_input("Link oficial do Governo:", value="https://resultados.tse.jus.br/oficial/ele2026/3220/dados-simplificados/br/br-c0001-e003220-r.json")
+        url_tse = st.text_input("Link oficial do Governo (deixe em branco para simulação):", value="")
     
     col_btn1, col_btn2 = st.columns(2)
     with col_btn1:
