@@ -127,7 +127,7 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
             fig_apuracao.update_layout(barmode='stack', height=150, showlegend=False, margin=dict(l=0, r=0, t=0, b=0))
             fig_apuracao.update_xaxes(range=[0, 100], visible=False)
             fig_apuracao.update_yaxes(visible=False)
-            st.plotly_chart(fig_apuracao, use_container_width=True)
+            st.plotly_chart(fig_apuracao, use_container_width=True, config={'displayModeBar': False})
             
     except Exception as e:
         st.error(f"Erro ao conectar com o TSE: {e}")
@@ -207,7 +207,7 @@ else:
     ))
 
     fig_gauge.update_layout(grid={'rows': 1, 'columns': 2, 'pattern': "independent"}, height=350, margin=dict(l=20, r=20, t=50, b=20))
-    st.plotly_chart(fig_gauge, use_container_width=True)
+    st.plotly_chart(fig_gauge, use_container_width=True, config={'displayModeBar': False})
 
     # ==================================
     # BLOCO NOVO: A TERCEIRA VIA
@@ -228,8 +228,8 @@ else:
     
     fig_barras = px.bar(df_terceira, x='Porcentagem', y='Candidato', text='Porcentagem', orientation='h', color='Cor', color_discrete_map='identity')
     fig_barras.update_traces(texttemplate='%{text:.1f}%', textposition='outside', marker_line_color='black', marker_line_width=1)
-    fig_barras.update_layout(height=250, xaxis=dict(range=[0, 10], visible=False), yaxis_title="", plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=0, t=0, b=0))
-    st.plotly_chart(fig_barras, use_container_width=True)
+    fig_barras.update_layout(height=250, xaxis=dict(range=[0, 10], visible=False), yaxis_title="", plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=40, t=20, b=0))
+    st.plotly_chart(fig_barras, use_container_width=True, config={'displayModeBar': False})
 
     with st.expander("📊 Ver o Histórico de Crescimento ao Longo do Ano"):
         fig1 = go.Figure()
@@ -240,7 +240,7 @@ else:
         fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Tendencia_Ronaldo Caiado'], mode='lines', name='Caiado', line=dict(color='purple', width=1, dash='dot')))
         fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Tendencia_Renan Santos'], mode='lines', name='Renan', line=dict(color='gold', width=1, dash='dot')))
         fig1.update_layout(height=350, hovermode='x unified', xaxis_title="", yaxis_title="Intenção Híbrida (%)")
-        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig1, use_container_width=True, config={'displayModeBar': False})
 
 # ==========================================
 # RODAPÉ: O PEDÁGIO DE LEADS (SOFT CAPTURE)

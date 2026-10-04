@@ -1,0 +1,33 @@
+{
+  "pst": "34.56",
+  "dt": "04/10/2026",
+  "ht": "18:45:00",
+  "cand": [
+    {
+      "seq": "1",
+      "sqcand": "22",
+      "n": "22",
+      "nm": "FLÁVIO BOLSONARO",
+      "cc": "PL",
+      "nv": "Candidato a Vice 1",
+      "e": "n",
+      "st": "",
+      "dvt": "Válido",
+      "vap": "38450123",
+      "pvap": "51.20"
+    },
+    {
+      "seq": "2",
+      "sqcand": "13",
+      "n": "13",
+      "nm": "LULA",
+      "cc": "PT",
+      "nv": "Candidato a Vice 2",
+      "e": "n",
+      "st": "",
+      "dvt": "Válido",
+      "vap": "36645980",
+      "pvap": "48.80"
+    }
+  ]
+}
