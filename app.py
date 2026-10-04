@@ -106,6 +106,23 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
             with open("tse_apuracao_mock.json", "r", encoding='utf-8') as f:
                 dados_tse = json.load(f)
             
+            import random
+            # SIMULAÇÃO AO VIVO: Faz os números subirem baseados no relógio
+            segundos_passados = (datetime.datetime.now().minute * 60) + datetime.datetime.now().second
+            incremento = (segundos_passados / 3600.0) * 15.0 # Sobe até 15% a cada hora
+            
+            urnas_base = float(dados_tse.get("pst", 0))
+            nova_urna = min(urnas_base + incremento, 99.99)
+            dados_tse["pst"] = f"{nova_urna:.2f}"
+            dados_tse["ht"] = datetime.datetime.now().strftime("%H:%M:%S")
+            
+            if len(dados_tse.get("cand", [])) >= 2:
+                p1_base = float(dados_tse["cand"][0]["pvap"])
+                p2_base = float(dados_tse["cand"][1]["pvap"])
+                flut = random.uniform(-0.15, 0.15)
+                dados_tse["cand"][0]["pvap"] = f"{p1_base + flut:.2f}"
+                dados_tse["cand"][1]["pvap"] = f"{p2_base - flut:.2f}"
+            
         urnas_apuradas = float(dados_tse.get("pst", 0))
         data_hora = f"{dados_tse.get('dt', '')} às {dados_tse.get('ht', '')}"
         
