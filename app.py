@@ -162,79 +162,60 @@ if modo_app == "🔴 Apuração Oficial (TSE)":
         st.error(f"Erro ao conectar com o TSE: {e}")
 
 else:
-    # MÓDULO 2: PREDIÇÃO GAMIFICADA
+    # MÓDULO 2: PREDIÇÃO GAMIFICADA DE 2º TURNO E AUTÓPSIA
     if st.button("🔴 ACOMPANHAR APURAÇÃO OFICIAL AO VIVO", type="primary", use_container_width=True):
         st.session_state['modo'] = "🔴 Apuração Oficial (TSE)"
         st.rerun()
 
-    st.title("🔥 Oráculo 2026: A Mãe de Todas as Pesquisas")
-    st.markdown("O primeiro supercomputador que mistura as ruas com a internet para prever a urna antes da TV.")
+    st.title("🔥 Oráculo 2026: A Batalha Final")
+    st.markdown("O simulador preditivo focado na engenharia matemática do 2º Turno.")
 
-    with st.expander("🧠 Como ler este Painel? (Entenda a Ciência)"):
-        st.markdown("**1. Por que os números são diferentes da TV?**")
-        st.write("Porque não confiamos apenas no 'Voto Frio' (pesquisas de rua). Nós misturamos a Rua com a velocidade da Internet (Voto Quente/Engajamento). É como prever o tempo: não olhamos só pro céu de hoje, mas para o radar das redes.")
-        st.markdown("**2. Para que servem os botões deslizantes?**")
-        st.write("Eles são uma 'Máquina do Futuro'. Simulam para onde os eleitores indecisos correriam caso uma bomba estoure (crise ou escândalo) na manhã da eleição.")
-        st.markdown("**3. O que são Votos Válidos Projetados?**")
-        st.write("É a simulação de como a tela final do TSE vai terminar. Ela já contabiliza o Efeito Voto Útil dos eleitores da terceira via migrando de última hora para os líderes.")
-
+    # NOVO BLOCO: AUTÓPSIA DO 1º TURNO
+    st.error("🚨 **AUTÓPSIA DO 1º TURNO:** Por que a Inteligência Artificial errou?")
+    st.markdown("**Resultado Oficial:** Flávio (47.03%), Lula (45.16%) e Cury derretendo para (2.89%).")
+    st.markdown("**O Erro do Sistema:** A nossa IA foi enganada pela *Ilusão de Engajamento*. Cury, Zema e Caiado tinham um tráfego colossal na internet (Voto Quente), o que mantinha eles com quase 15% nas nossas projeções ao longo do mês. Porém, nas últimas 48 horas, o pânico do **Voto Útil** tomou conta do país. O eleitor abandonou a terceira via na boca de urna para tentar decidir a eleição no 1º turno, esvaziando completamente os nanicos. O Voto Quente da internet não virou voto real.")
+    
     st.markdown("---")
-    st.markdown("### 🎮 Simulador Interativo")
+    
+    st.markdown("### 🎮 Simulador do 2º Turno: O Leilão dos Órfãos")
+    st.markdown("A eleição agora depende **exclusivamente** dos **7.81% dos votos válidos** que sobraram da terceira via (Cury, Zema, Caiado, etc). Para quem eles vão transferir seus votos?")
+    
     col_sim1, col_sim2 = st.columns(2)
     with col_sim1:
-        sim_economia = st.slider("💰 Crise Econômica (Lula Perde)", min_value=0, max_value=10, value=0, format="-%d%%")
+        transf_flavio = st.slider("🔵 % da 3ª Via que vota no Flávio", min_value=0, max_value=100, value=40, format="%d%%")
     with col_sim2:
-        sim_escandalo = st.slider("📱 Pânico nas Redes (Flávio Perde)", min_value=0, max_value=10, value=0, format="-%d%%")
-
-    df_analise = df_bruto.copy()
-    df_analise = df_analise.groupby('Data').mean(numeric_only=True).reset_index()
-
-    # Calculando a tendência para TODOS os candidatos
-    candidatos = ['Lula', 'Flavio Bolsonaro', 'Augusto Cury', 'Ronaldo Caiado', 'Romeu Zema', 'Renan Santos']
-    for col in candidatos:
-        df_analise[f'Tendencia_{col}'] = calculate_trend(df_analise, col)
+        transf_lula = st.slider("🔴 % da 3ª Via que vota no Lula", min_value=0, max_value=100, value=40, format="%d%%")
         
-    # Aplicando a fórmula Mista apenas para os gigantes (que tem internet relevante)
-    if 'Internet_Lula' in df_analise.columns:
-        tendencia_net_lula = calculate_trend(df_analise, 'Internet_Lula')
-        tendencia_net_flavio = calculate_trend(df_analise, 'Internet_Flavio Bolsonaro')
-        df_analise['Base_Lula'] = (df_analise['Tendencia_Lula'] * 0.6) + (tendencia_net_lula * 0.4)
-        df_analise['Base_Flavio'] = (df_analise['Tendencia_Flavio Bolsonaro'] * 0.6) + (tendencia_net_flavio * 0.4)
-    else:
-        df_analise['Base_Lula'] = df_analise['Tendencia_Lula']
-        df_analise['Base_Flavio'] = df_analise['Tendencia_Flavio Bolsonaro']
-
-    # Subtraindo o dano simulado
-    latest_lula = df_analise['Base_Lula'].iloc[-1] - sim_economia
-    latest_flavio = df_analise['Base_Flavio'].iloc[-1] - sim_escandalo
+    st.caption("Nota: Se a soma não der 100%, o sistema entende que os eleitores restantes votarão Nulo/Branco.")
     
-    # Pegando as tendências puras (100% Pesquisa) para a terceira via
-    latest_cury = df_analise['Tendencia_Augusto Cury'].iloc[-1]
-    latest_caiado = df_analise['Tendencia_Ronaldo Caiado'].iloc[-1]
-    latest_zema = df_analise['Tendencia_Romeu Zema'].iloc[-1]
-    latest_renan = df_analise['Tendencia_Renan Santos'].iloc[-1]
+    # Matemática do 2º Turno
+    votos_orfaos = 7.81
+    base_flavio = 47.03
+    base_lula = 45.16
+    
+    proj_flavio = base_flavio + (votos_orfaos * (transf_flavio / 100.0))
+    proj_lula = base_lula + (votos_orfaos * (transf_lula / 100.0))
+    
+    # Normalizando para válidos no 2º Turno (ignora brancos e nulos)
+    total_validos_2t = proj_flavio + proj_lula
+    pct_flavio_final = (proj_flavio / total_validos_2t) * 100
+    pct_lula_final = (proj_lula / total_validos_2t) * 100
 
     st.markdown("---")
-    st.markdown("### 🔥 Termômetro: Os Finalistas (Líderes)")
-
-    # Calculando porcentagens válidas GERAIS (somando todos) para que o velocímetro represente 1º Turno
-    total_votos_validos_1turno = latest_lula + latest_flavio + latest_cury + latest_caiado + latest_zema + latest_renan
-    
-    pct_lula_validos = (latest_lula / total_votos_validos_1turno) * 100
-    pct_flavio_validos = (latest_flavio / total_votos_validos_1turno) * 100
+    st.markdown("### 🔮 Projeção do Vencedor (Votos Válidos 2ºT)")
 
     fig_gauge = go.Figure()
     fig_gauge.add_trace(go.Indicator(
-        mode = "gauge+number", value = pct_lula_validos, title = {'text': "Lula (PT)", 'font': {'size': 24, 'color': 'red'}},
-        number = {'suffix': "%", 'font': {'size': 40, 'color': 'red'}},
-        gauge = {'axis': {'range': [0, 60], 'tickwidth': 1}, 'bar': {'color': "red"},
+        mode = "gauge+number", value = pct_lula_final, title = {'text': "Lula (PT)", 'font': {'size': 24, 'color': 'red'}},
+        number = {'suffix': "%", 'font': {'size': 40, 'color': 'red'}, 'valueformat': ".1f"},
+        gauge = {'axis': {'range': [0, 100], 'tickwidth': 1}, 'bar': {'color': "red"},
                  'steps': [{'range': [0, 50], 'color': "rgba(255, 0, 0, 0.1)"}],
                  'threshold': {'line': {'color': "black", 'width': 6}, 'thickness': 0.75, 'value': 50}}, domain = {'row': 0, 'column': 0}
     ))
     fig_gauge.add_trace(go.Indicator(
-        mode = "gauge+number", value = pct_flavio_validos, title = {'text': "Flávio (PL)", 'font': {'size': 24, 'color': 'blue'}},
-        number = {'suffix': "%", 'font': {'size': 40, 'color': 'blue'}},
-        gauge = {'axis': {'range': [0, 60], 'tickwidth': 1}, 'bar': {'color': "blue"},
+        mode = "gauge+number", value = pct_flavio_final, title = {'text': "Flávio (PL)", 'font': {'size': 24, 'color': 'blue'}},
+        number = {'suffix': "%", 'font': {'size': 40, 'color': 'blue'}, 'valueformat': ".1f"},
+        gauge = {'axis': {'range': [0, 100], 'tickwidth': 1}, 'bar': {'color': "blue"},
                  'steps': [{'range': [0, 50], 'color': "rgba(0, 0, 255, 0.1)"}],
                  'threshold': {'line': {'color': "black", 'width': 6}, 'thickness': 0.75, 'value': 50}}, domain = {'row': 0, 'column': 1}
     ))
@@ -242,38 +223,10 @@ else:
     fig_gauge.update_layout(grid={'rows': 1, 'columns': 2, 'pattern': "independent"}, height=350, margin=dict(l=20, r=20, t=50, b=20))
     st.plotly_chart(fig_gauge, use_container_width=True, config={'displayModeBar': False})
 
-    # ==================================
-    # BLOCO NOVO: A TERCEIRA VIA
-    # ==================================
-    st.markdown("### 🏃‍♂️ A Terceira Via (Outros Candidatos)")
-    st.markdown("O peso dos nanicos que impedem a vitória no primeiro turno:")
+    vencedor = "Flávio Bolsonaro" if pct_flavio_final > pct_lula_final else ("Lula" if pct_lula_final > pct_flavio_final else "Empate Técnico")
+    cor_vencedor = "blue" if vencedor == "Flávio Bolsonaro" else ("red" if vencedor == "Lula" else "gray")
     
-    pct_cury = (latest_cury / total_votos_validos_1turno) * 100
-    pct_caiado = (latest_caiado / total_votos_validos_1turno) * 100
-    pct_zema = (latest_zema / total_votos_validos_1turno) * 100
-    pct_renan = (latest_renan / total_votos_validos_1turno) * 100
-    
-    df_terceira = pd.DataFrame({
-        'Candidato': ['Augusto Cury', 'Ronaldo Caiado', 'Romeu Zema', 'Renan Santos'],
-        'Porcentagem': [pct_cury, pct_caiado, pct_zema, pct_renan],
-        'Cor': ['green', 'purple', 'orange', 'gold']
-    }).sort_values(by='Porcentagem', ascending=True) # Ascendente para o barra horizontal ficar bonito
-    
-    fig_barras = px.bar(df_terceira, x='Porcentagem', y='Candidato', text='Porcentagem', orientation='h', color='Cor', color_discrete_map='identity')
-    fig_barras.update_traces(texttemplate='%{text:.1f}%', textposition='outside', marker_line_color='black', marker_line_width=1)
-    fig_barras.update_layout(height=250, xaxis=dict(range=[0, 10], visible=False), yaxis_title="", plot_bgcolor='rgba(0,0,0,0)', margin=dict(l=0, r=40, t=20, b=0))
-    st.plotly_chart(fig_barras, use_container_width=True, config={'displayModeBar': False})
-
-    with st.expander("📊 Ver o Histórico de Crescimento ao Longo do Ano"):
-        fig1 = go.Figure()
-        fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Base_Lula'], mode='lines', name='Lula', line=dict(color='red', width=4)))
-        fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Base_Flavio'], mode='lines', name='Flávio', line=dict(color='blue', width=4)))
-        # Opcional: adicionar linhas fracas para os outros
-        fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Tendencia_Augusto Cury'], mode='lines', name='Cury', line=dict(color='green', width=1, dash='dot')))
-        fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Tendencia_Ronaldo Caiado'], mode='lines', name='Caiado', line=dict(color='purple', width=1, dash='dot')))
-        fig1.add_trace(go.Scatter(x=df_analise['Data'], y=df_analise['Tendencia_Renan Santos'], mode='lines', name='Renan', line=dict(color='gold', width=1, dash='dot')))
-        fig1.update_layout(height=350, hovermode='x unified', xaxis_title="", yaxis_title="Intenção Híbrida (%)")
-        st.plotly_chart(fig1, use_container_width=True, config={'displayModeBar': False})
+    st.markdown(f"<h3 style='text-align: center;'>Com esta migração, o Eleito seria: <strong style='color: {cor_vencedor};'>{vencedor}</strong></h3>", unsafe_allow_html=True)
 
 # ==========================================
 # RODAPÉ: O PEDÁGIO DE LEADS (SOFT CAPTURE)
